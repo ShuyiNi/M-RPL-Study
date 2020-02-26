@@ -1,0 +1,3 @@
+#define ROOT_ID 1
+
+#define LOG_CONF_LEVEL_RPL LOG_LEVEL_INFO
