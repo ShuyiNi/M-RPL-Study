@@ -275,7 +275,7 @@
   <plugin>
     org.contikios.cooja.plugins.ScriptRunner
     <plugin_config>
-      <scriptfile>[CONFIG_DIR]/run.js</scriptfile>
+      <scriptfile>[CONFIG_DIR]/sim.js</scriptfile>
       <active>true</active>
     </plugin_config>
     <width>541</width>

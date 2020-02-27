@@ -1,5 +1,6 @@
+TARGET = cooja
 CONTIKI_PROJECT = node
 all: $(CONTIKI_PROJECT)
 
-CONTIKI = ../../contiki-ng
+CONTIKI = ../contiki-ng
 include $(CONTIKI)/Makefile.include

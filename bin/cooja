@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+cd "$(dirname "$0")"
+cd ..
+pwd
+
+COOJA="contiki-ng/tools/cooja"
+ant -Dbasedir="$COOJA" -f "$COOJA/build.xml" run

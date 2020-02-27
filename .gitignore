@@ -1,9 +1,3 @@
 build/
+log-*/
 *.cooja
-
-#test artifacts
-*.testlog
-*.scriptlog
-*.coojalog
-*.summary
-*.err

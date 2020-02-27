@@ -1,6 +1,6 @@
 TIMEOUT(300000); /* Time out after 5 minutes */
 
 while(true) {
-  log.log(time + " " + "node-" + id + " "+ msg + "\n");
+  log.log(time + "\t" + "ID:" + id + "\t"+ msg + "\n");
   YIELD();
 }

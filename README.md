@@ -1,32 +1,58 @@
-# CSE-222A-Project
-Research project for CSE 222A on RPL-based IoT protocol congestion
+# RPL Congestion Control
+This is a [course](http://cseweb.ucsd.edu/~gmporter/classes/wi20/cse222a/) project.
 
 ## Requirements
 
-- Docker
 - git
-- XQuartz
+- Docker
+- XQuartz [macOS]
 
 ## Workflow
 
 Clone the repository:
 ```console
-$ git clone https://github.com/ShuyiNi/CSE-222A-Project.git  # or git@github.com:ShuyiNi/CSE-22
-$ cd CSE-222A-Project
+$ git clone <repo-url>
+$ cd <repo-dir>
 $ git submodule update --init --recursive
 ```
 
 Set up the environment:
 ```console
-$ source script/setup-env.sh
-$ source script/setup-mac.sh  # macOS specific
+$ source env/setup.sh
+$ source env/setup-linux.sh  # for Linux
+$ source env/setup-macos.sh  # for macOS
 ```
 
-Start Cooja:
+Build a Docker image from local Dockerfile:
+```console
+$ make build
+```
+
+After above steps, you shall have a Docker image built, and a convenient command `contiker` defined to run the Docker image. This command can be invoked to run various other commands within the Docker container.
+
+To start Cooja:
 ```
 $ contiker cooja
 ```
 
+To run a Cooja simulation:
 ```
-$CONTIKI/tests/simexec.sh cooja-sim/test/sim.csc "$CONTIKI" cooja-sim/test/sim 1 1
+$ contiker cooja-run cooja-sim/sim.csc  # or
+$ contiker make run
+```
+
+To auto-format source code
+```
+$ contiker make fmt
+```
+
+Or simple enter the Docker container:
+```
+$ contiker bash
+```
+
+To clean up:
+```
+$ make clean
+$ make distclean
 ```

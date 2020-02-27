@@ -1,1 +1,0 @@
-Adapted from contiki-ng/examples/benchmarks/rpl-req-resp
