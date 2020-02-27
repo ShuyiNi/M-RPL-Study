@@ -13,7 +13,7 @@
 #define LOG_LEVEL LOG_LEVEL_INFO
 
 #define UDP_PORT 8214
-#define SEND_INTERVAL (CLOCK_SECOND)
+#define SEND_INTERVAL (2*CLOCK_SECOND)
 
 static struct simple_udp_connection udp_conn;
 
@@ -34,6 +34,7 @@ static void udp_rx_callback(struct simple_udp_connection *c,
 }
 
 PROCESS_THREAD(app_process, ev, data) {
+  static struct etimer start_timer;
   static struct etimer periodic_timer;
   static uint32_t count;
   static uip_ipaddr_t dest_ipaddr;
@@ -48,6 +49,10 @@ PROCESS_THREAD(app_process, ev, data) {
     NETSTACK_ROUTING.root_start();
 
   } else {
+    /* wait 30 seconds for Topology built. */
+    etimer_set(&start_timer, CLOCK_SECOND * 30);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&start_timer));
+
     etimer_set(&periodic_timer, random_rand() % SEND_INTERVAL);
     while (1) {
       PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
