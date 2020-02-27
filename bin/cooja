@@ -1,9 +1,11 @@
-#!/usr/bin/env bash
-set -e
+#!/usr/bin/env python3
+from pathlib import Path
+from subprocess import run
 
-cd "$(dirname "$0")"
-cd ..
-pwd
+# Configure
+PROJECT_ROOT = Path(__file__).absolute().parent.parent
+COOJA = PROJECT_ROOT / "contiki-ng/tools/cooja"
 
-COOJA="contiki-ng/tools/cooja"
-ant -Dbasedir="$COOJA" -f "$COOJA/build.xml" run
+# Run
+cmd = f"ant -Dbasedir='{COOJA}' -f '{COOJA}/build.xml' run"
+run(cmd, shell=True)

@@ -8,7 +8,7 @@ run:
 
 fmt:
 	find cooja-sim -name '*.h' -or -name '*.c' -exec clang-format -style=file -i {} \;
-	black bin/cooja-run
+	black bin/cooja bin/cooja-run
 
 # Commands runnable without contiker
 

@@ -31,28 +31,28 @@ $ make build
 After above steps, you shall have a Docker image built, and a convenient command `contiker` defined to run the Docker image. This command can be invoked to run various other commands within the Docker container.
 
 To start Cooja:
-```
+```console
 $ contiker cooja
 ```
 
 To run a Cooja simulation:
-```
+```console
 $ contiker cooja-run cooja-sim/sim.csc  # or
 $ contiker make run
 ```
 
 To auto-format source code
-```
+```console
 $ contiker make fmt
 ```
 
 Or simple enter the Docker container:
-```
+```console
 $ contiker bash
 ```
 
 To clean up:
-```
+```console
 $ make clean
 $ make distclean
 ```

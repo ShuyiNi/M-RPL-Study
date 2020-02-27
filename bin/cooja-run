@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from subprocess import run
 
-# Locate files
+# Configure
 PROJECT_ROOT = Path(__file__).absolute().parent.parent
 CONTIKI = PROJECT_ROOT / "contiki-ng"
 COOJA = CONTIKI / "tools/cooja/dist/cooja.jar"
@@ -26,6 +26,6 @@ work_dir = config.parent
 log_dir = work_dir / f"log-{tag}"
 log_dir.mkdir(parents=True, exist_ok=True)
 
-# Run Cooja simulation
+# Run
 cmd = f"java -Xshare:on -jar {COOJA} -nogui={config} -contiki={CONTIKI} -random-seed={seed}"
 run(cmd, shell=True, cwd=log_dir)
