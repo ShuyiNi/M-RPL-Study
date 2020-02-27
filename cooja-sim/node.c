@@ -13,7 +13,8 @@
 #define LOG_LEVEL LOG_LEVEL_INFO
 
 #define UDP_PORT 8214
-#define SEND_INTERVAL (2*CLOCK_SECOND)
+#define SEND_INTERVAL (CLOCK_SECOND / 2)
+#define JITR_INTERVAL (SEND_INTERVAL / 10)
 
 static struct simple_udp_connection udp_conn;
 
@@ -70,8 +71,8 @@ PROCESS_THREAD(app_process, ev, data) {
       }
 
       /* Add some jitter */
-      etimer_set(&periodic_timer, SEND_INTERVAL - CLOCK_SECOND +
-                                      (random_rand() % (2 * CLOCK_SECOND)));
+      etimer_set(&periodic_timer, SEND_INTERVAL - JITR_INTERVAL / 2 +
+                                      random_rand() % JITR_INTERVAL);
     }
   }
 
