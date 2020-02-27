@@ -49,8 +49,8 @@ PROCESS_THREAD(app_process, ev, data) {
     NETSTACK_ROUTING.root_start();
 
   } else {
-    /* wait 30 seconds for Topology built. */
-    etimer_set(&start_timer, CLOCK_SECOND * 30);
+    /* wait 60 seconds for Topology built. */
+    etimer_set(&start_timer, CLOCK_SECOND * 60);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&start_timer));
 
     etimer_set(&periodic_timer, random_rand() % SEND_INTERVAL);
