@@ -3,6 +3,7 @@ CONTIKI_PROJECT = node
 all: $(CONTIKI_PROJECT)
 
 CONTIKI = ../contiki-ng
+WERROR = 0
 include $(CONTIKI)/Makefile.include
 
 #default setting from Makefile.include
