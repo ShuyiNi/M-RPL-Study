@@ -11,6 +11,7 @@ RUN apt-get update -qq && \
       python3 \
       python3-pip \
       xauth \
+      python3-matplotlib \
       > /dev/null && \
     apt-get clean -qq
 RUN pip3 install -q \

@@ -30,17 +30,6 @@ log_dir.mkdir(parents=True, exist_ok=True)
 cmd = f"java -Xshare:on -jar {COOJA} -nogui={config} -contiki={CONTIKI} -random-seed={seed}"
 run(cmd, shell=True, cwd=log_dir)
 
-# Simple log report
-n_sent = 0
-n_recv = 0
-with (log_dir / "COOJA.testlog").open("r") as f:
-    for line in f:
-        if "[INFO: App       ] Sending" in line:
-            n_sent += 1
-        elif "[INFO: App       ] Received" in line:
-            n_recv += 1
-print("n_sent", n_sent)
-print("n_recv", n_recv)
-with (log_dir / "stat.txt").open("w") as f:
-    f.write(f"n_sent {n_sent}\n")
-    f.write(f"n_recv {n_recv}\n")
+from parse_log import draw_fig
+import os
+draw_fig(os.fspath(log_dir / "COOJA.testlog"))
