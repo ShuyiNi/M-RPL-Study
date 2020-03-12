@@ -30,6 +30,11 @@ $ make build
 
 After above steps, you shall have a Docker image built, and a convenient command `contiker` defined to run the Docker image. This command can be invoked to run various other commands within the Docker container.
 
+To test the code compiles:
+```console
+$ contiker make compile-test
+```
+
 To start Cooja:
 ```console
 $ contiker cooja

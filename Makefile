@@ -3,6 +3,9 @@ build:
 
 # Commands to run with contiker
 
+compile-test:
+	cd cooja-sim/m-rpl && make node.native
+
 run:
 	./bin/cooja-run cooja-sim/sim.csc
 
@@ -20,4 +23,4 @@ distclean:
 	$(MAKE) clean
 	cd cooja-sim && $(MAKE) distclean
 
-.PHONY: build run clean distclean fmt
+.PHONY: build compile-test run clean distclean fmt
