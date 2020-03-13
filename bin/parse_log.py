@@ -113,7 +113,7 @@ def analyse_data(file, base_dir='./', file_prefix='', time_interval_secs=[0.5, 1
         fw.write(parse_info)
 
     if save_json:
-        with open('%slog_data.json' % file_prefix, 'w') as fw:
+        with open(os.path.join(base_dir, '%slog_data.json' % file_prefix), 'w') as fw:
             json.dump(parse_res[2], fw, indent=2)
 
     for time_interval_sec in time_interval_secs:
