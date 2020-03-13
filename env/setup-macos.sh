@@ -8,7 +8,7 @@ contiker () {
         cp \${HOME}/dot.Xauthority \${HOME}/.Xauthority
         DISPLAY_NAME=host.docker.internal:0
         export DISPLAY=\${DISPLAY_NAME}.0
-        XAUTH_HEXKEY=$(xauth list | grep /unix | awk '{print $3}')
+        XAUTH_HEXKEY=$(xauth list | grep local/unix | awk '{print $3}')
         xauth add \${DISPLAY_NAME} . \${XAUTH_HEXKEY}
         $*"
     docker run \

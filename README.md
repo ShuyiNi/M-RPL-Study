@@ -25,14 +25,15 @@ $ source env/setup-macos.sh  # for macOS
 
 Build a Docker image from local Dockerfile:
 ```console
-$ make build
+$ make docker-build
 ```
 
 After above steps, you shall have a Docker image built, and a convenient command `contiker` defined to run the Docker image. This command can be invoked to run various other commands within the Docker container.
 
 To test the code compiles:
 ```console
-$ contiker make compile-test
+$ contiker make compile-rpl
+$ contiker make compile-m-rpl
 ```
 
 To start Cooja:
@@ -42,8 +43,8 @@ $ contiker cooja
 
 To run a Cooja simulation:
 ```console
-$ contiker cooja-run cooja-sim/sim.csc  # or
-$ contiker make run
+$ contiker cooja-run cooja-sim/rpl/sim.csc  # or
+$ contiker make run-rpl
 ```
 
 To auto-format source code

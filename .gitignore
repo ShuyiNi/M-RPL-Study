@@ -2,3 +2,5 @@ build/
 log-*/
 *.cooja
 *.native
+
+__pycache__/
