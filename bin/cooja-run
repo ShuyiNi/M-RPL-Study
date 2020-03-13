@@ -31,6 +31,6 @@ log_dir.mkdir(parents=True, exist_ok=True)
 cmd = f"java -Xshare:on -jar {COOJA} -nogui={config} -contiki={CONTIKI} -random-seed={seed}"
 run(cmd, shell=True, cwd=log_dir, env=os.environ)
 
-from parse_log import draw_fig
+import parse_log
 import os
-draw_fig("COOJA.testlog", os.fspath(log_dir))
+parse_log.analyse_data("COOJA.testlog", base_dir=os.fspath(log_dir), time_interval_secs=[0.5, 1, 1.5, 2, 5, 10])
