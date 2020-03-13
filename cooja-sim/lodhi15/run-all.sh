@@ -1,7 +1,24 @@
 #!/usr/bin/env bash
+cp Makefile.template Makefile
+sed -i 's/{{multipath}}/0/g' Makefile
+sed -i 's/{{n_src}}/5/g' Makefile
+sed -i 's/{{pkt_int}}/10/g' Makefile
+cooja-run -t rpl-5-10 sim.csc
 
-SIM_MULTIPAH=0 SIM_N_SRC=5 SIM_PKT_INT=10 cooja-run -t rpl-5-10 sim.csc
-SIM_MULTIPAH=1 SIM_N_SRC=5 SIM_PKT_INT=10 cooja-run -t mrpl-5-10 sim.csc
+cp Makefile.template Makefile
+sed -i 's/{{multipath}}/1/g' Makefile
+sed -i 's/{{n_src}}/5/g' Makefile
+sed -i 's/{{pkt_int}}/10/g' Makefile
+cooja-run -t mrpl-5-10 sim.csc
 
-SIM_MULTIPAH=0 SIM_N_SRC=14 SIM_PKT_INT=5 cooja-run -t rpl-14-5 sim.csc
-SIM_MULTIPAH=1 SIM_N_SRC=14 SIM_PKT_INT=5 cooja-run -t mrpl-14-5 sim.csc
+cp Makefile.template Makefile
+sed -i 's/{{multipath}}/0/g' Makefile
+sed -i 's/{{n_src}}/14/g' Makefile
+sed -i 's/{{pkt_int}}/10/g' Makefile
+cooja-run -t rpl-14-5 sim.csc
+
+cp Makefile.template Makefile
+sed -i 's/{{multipath}}/1/g' Makefile
+sed -i 's/{{n_src}}/14/g' Makefile
+sed -i 's/{{pkt_int}}/10/g' Makefile
+cooja-run -t mrpl-14-5 sim.csc
