@@ -4,6 +4,7 @@
 from collections import defaultdict
 import re
 import matplotlib.pyplot as plt
+import os
 
 
 def time_to_int(time_str):
@@ -71,23 +72,23 @@ def parse_file(file):
             else:
                 recv_items[(res['src'], res['dest'], res['id'], res['type'])] = res['time']
 
-    with open('log_err_app_lines.txt', 'w') as fw:
-        fw.write(err_line)
-
-    return send_items, recv_items, all_json
+    return send_items, recv_items, all_json, err_line
             
             
-def draw_fig(file):
+def draw_fig(file, base_dir='./'):
     SMALL_NUM = 1e-20
     # file = 'log-20200227-201756/COOJA.testlog'
 
-    parse_res = parse_file(file)
+    parse_res = parse_file(os.path.join(base_dir, file))
 
     time_unit = 1_000_000 # unit in micro sec, 1 s = 1,000,000 ms
     time_interval = 5 * time_unit
 
     sends = parse_res[0]
     recvs = parse_res[1]
+
+    with open(os.path.join(base_dir, 'log_err_app_lines.txt'), 'w') as fw:
+        fw.write(parse_res[3])
 
     latency_count = []
     deliver_count = []
@@ -107,7 +108,7 @@ def draw_fig(file):
     parse_info += "average latency:        %.6f\n" % avg_latency
     parse_info += "average delivery ratio: %.6f\n" % avg_deliver_rate
 
-    with open('parse_info.txt', 'w') as fw:
+    with open(os.path.join(base_dir, 'parse_info.txt'), 'w') as fw:
         fw.write(parse_info)
 
     all_times = list(sends.values()) + list(recvs.values())
@@ -142,8 +143,8 @@ def draw_fig(file):
     plt.ylabel('packet delivery ratio', family='Times New Roman', fontsize=40)
     plt.xticks(family='Times New Roman', fontsize=40)
     plt.yticks(family='Times New Roman', fontsize=40)
-    plt.savefig('deliverrate_t.png')
-    plt.show()
+    plt.savefig(os.path.join(base_dir, 'deliverrate_t.png'))
+    plt.close()
 
     plt.figure(figsize=(15, 10))
     plt.plot([i * time_interval / time_unit for i in range(len(times))], latency_time, 'black', label='latency')
@@ -151,8 +152,8 @@ def draw_fig(file):
     plt.ylabel('latency (s)', family='Times New Roman', fontsize=40)
     plt.xticks(family='Times New Roman', fontsize=40)
     plt.yticks(family='Times New Roman', fontsize=40)
-    plt.savefig('latency_t.png')
-    plt.show()
+    plt.savefig(os.path.join(base_dir, 'latency_t.png'))
+    plt.close()
 
     plt.figure(figsize=(15, 10))
     plt.plot([i * time_interval / time_unit for i in range(len(times))], throughput_time, 'black', label='throughput')
@@ -160,8 +161,8 @@ def draw_fig(file):
     plt.ylabel('throughput (packets/s)', family='Times New Roman', fontsize=40)
     plt.xticks(family='Times New Roman', fontsize=40)
     plt.yticks(family='Times New Roman', fontsize=40)
-    plt.savefig('throughput_t.png')
-    plt.show()
+    plt.savefig(os.path.join(base_dir, 'throughput_t.png'))
+    plt.close()
 
     '''
     l1=plt.plot(x1,y1,'r--',label='type1')
