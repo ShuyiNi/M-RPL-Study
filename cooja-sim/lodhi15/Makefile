@@ -1,0 +1,18 @@
+CONTIKI_PROJECT = node
+all: $(CONTIKI_PROJECT)
+
+# Configure simulation parameters
+SIM_MULTIPATH ?= 0
+CFLAGS += -DRPL_CONF_WITH_MULTIPATH=$(SIM_MULTIPATH)
+SIM_N_SRC ?= 5
+CFLAGS += -DSIM_N_SRC=$(SIM_N_SRC)
+SIM_PKT_INT ?= 10
+CFLAGS += -DSIM_PKT_INT=$(SIM_PKT_INT)
+
+# Configure netstack
+MAKE_MAC = MAKE_MAC_CSMA
+MAKE_NET = MAKE_NET_IPV6
+MAKE_ROUTING = MAKE_ROUTING_RPL_LITE
+
+CONTIKI = ../../contiki-ng
+include $(CONTIKI)/Makefile.include

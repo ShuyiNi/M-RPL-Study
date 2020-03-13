@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from datetime import datetime, timezone
 from pathlib import Path
 from subprocess import run
+import os
 
 # Configure
 PROJECT_ROOT = Path(__file__).absolute().parent.parent
@@ -28,7 +29,7 @@ log_dir.mkdir(parents=True, exist_ok=True)
 
 # Run
 cmd = f"java -Xshare:on -jar {COOJA} -nogui={config} -contiki={CONTIKI} -random-seed={seed}"
-run(cmd, shell=True, cwd=log_dir)
+run(cmd, shell=True, cwd=log_dir, env=os.environ)
 
 from parse_log import draw_fig
 import os
