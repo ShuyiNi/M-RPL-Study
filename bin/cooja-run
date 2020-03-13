@@ -23,7 +23,7 @@ tag = args.tag
 if tag is None:
     tag = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
 work_dir = config.parent
-log_dir = work_dir / f"log-{tag}"
+log_dir = work_dir / "log-files" / f"log-{tag}"
 log_dir.mkdir(parents=True, exist_ok=True)
 
 # Run
@@ -32,4 +32,4 @@ run(cmd, shell=True, cwd=log_dir)
 
 from parse_log import draw_fig
 import os
-draw_fig(os.fspath(log_dir / "COOJA.testlog"))
+draw_fig("COOJA.testlog", os.fspath(log_dir))

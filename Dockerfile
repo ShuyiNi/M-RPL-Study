@@ -11,6 +11,7 @@ RUN apt-get update -qq && \
       python3 \
       python3-pip \
       xauth \
+      python3-tk \
       python3-matplotlib \
       > /dev/null && \
     apt-get clean -qq
