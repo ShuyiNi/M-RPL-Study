@@ -5,21 +5,12 @@ docker-build:
 
 # Commands to run with contiker
 
-compile-m-rpl:
-	cd cooja-sim/m-rpl && make node.native
-
-compile-rpl:
-	cd cooja-sim/rpl && make node.native
-
-run-m-rpl:
-	./bin/cooja-run cooja-sim/m-rpl/sim.csc
-
-run-rpl:
-	./bin/cooja-run cooja-sim/rpl/sim.csc
+run-test:
+	cd experiment/test && ./run-all.sh
 
 fmt:
-	find cooja-sim -name '*.h' -or -name '*.c' -exec clang-format -style=file -i {} \;
-	black bin/cooja bin/cooja-run
+	# find experiment -name '*.h' -or -name '*.c' -exec clang-format -style=file -i {} \;
+	black bin/cooja bin/cooja-process bin/cooja-run
 
 # Commands runnable without contiker
 

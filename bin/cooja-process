@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+import json
+import re
+from argparse import ArgumentParser
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+def main():
+    # Parse arguments
+    parser = ArgumentParser()
+    parser.add_argument("log_dir", type=Path)
+    parser.add_argument("--bins", type=int, default=100)
+    args = parser.parse_args()
+    cooja_log_file = args.log_dir / "COOJA.testlog"
+    packet_log_file = args.log_dir / "packet-log.csv"
+    stat_file = args.log_dir / "stat.json"
+    plot_file = args.log_dir / "diag-plot.png"
+
+    # Parse log
+    df = parse_file(cooja_log_file)
+    df.to_csv(packet_log_file, index=False, float_format="%.3f")
+
+    # Report stat
+    report_stat(df, stat_file)
+
+    # Make diagnostic plot
+    make_diag_plot(df, plot_file, bins=args.bins)
+
+
+def parse_line(line):
+    res = re.compile(
+        r"(\S+)\s+?ID:(\d+)\s+?\[.*?\] Sending (.+?) (\d+) to 6G-([\dabcdef]+)\s?"
+    ).match(line)
+    if res:
+        _time = float(res.group(1)) * 1e-6
+        _src = int(res.group(2))
+        _type = res.group(3)
+        _id = int(res.group(4))
+        _dest = int(res.group(5), 16)
+        return {
+            "event": "send",
+            "type": _type,
+            "id": _id,
+            "src": _src,
+            "dst": _dest,
+            "time": _time,
+        }
+    res = re.compile(
+        r"(\S+)\s+?ID:(\d+)\s+?\[.*?\] Received (.+?) (\d+) from 6G-([\dabcdef]+)\s?"
+    ).match(line)
+    if res:
+        _time = float(res.group(1)) * 1e-6
+        _dest = int(res.group(2))
+        _type = res.group(3)
+        _id = int(res.group(4))
+        _src = int(res.group(5), 16)
+        return {
+            "event": "recv",
+            "type": _type,
+            "id": _id,
+            "src": _src,
+            "dst": _dest,
+            "time": _time,
+        }
+    return None
+
+
+def parse_file(file):
+    data = {}
+
+    with open(file, "r") as f:
+        for line in f:
+            if "INFO: App" not in line:
+                continue
+            res = parse_line(line)
+            if not res:
+                continue
+            key = (res["id"], res["src"], res["dst"])
+            if res["event"] == "send":
+                data[key] = [res["time"], None]
+            else:
+                data[key][1] = res["time"]
+
+    rows = [[*k, *v] for k, v in data.items()]
+    df = pd.DataFrame(rows, columns=["pkt_id", "src", "dst", "t_send", "t_recv"])
+    df["latency"] = df["t_recv"] - df["t_send"]
+    df.sort_values(by=["pkt_id", "src"], inplace=True)
+    return df
+
+
+def report_stat(df, stat_file):
+    n_send = df["t_send"].count()
+    n_recv = df["t_recv"].count()
+    stat = {
+        "n_send": int(n_send),
+        "n_recv": int(n_recv),
+        "pdr_avg": float(n_recv / n_send),
+        "lat_avg": float(df["latency"].mean()),
+    }
+    with open(stat_file, "w") as f:
+        json.dump(stat, f, indent=4)
+
+
+def make_diag_plot(df, plot_file, bins=100):
+    grp = df.groupby(pd.cut(df["t_recv"], bins))
+    grp_mean = grp.mean()
+
+    time = grp_mean["t_recv"].values
+    latency = grp_mean["latency"].values
+    throughput = grp.size().values
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+    ax1.plot(time, throughput)
+    ax1.set_ylabel("Throughput (s)")
+
+    ax2.plot(time, latency)
+    ax2.set_ylabel("Latency (s)")
+
+    ax2.set_xlabel("Time (s)")
+    fig.tight_layout()
+    fig.savefig(plot_file)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 # Contiki and Cooja
 build/
-log-*/
+log/
 *.cooja
 *.native
 *.o

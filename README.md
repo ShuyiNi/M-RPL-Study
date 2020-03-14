@@ -30,10 +30,9 @@ $ make docker-build
 
 After above steps, you shall have a Docker image built, and a convenient command `contiker` defined to run the Docker image. This command can be invoked to run various other commands within the Docker container.
 
-To test the code compiles:
+To run a test experiment:
 ```console
-$ contiker make compile-rpl
-$ contiker make compile-m-rpl
+$ contiker make run-test
 ```
 
 To start Cooja:
@@ -41,10 +40,9 @@ To start Cooja:
 $ contiker cooja
 ```
 
-To run a Cooja simulation:
+To run a Cooja simulation manually:
 ```console
-$ contiker cooja-run cooja-sim/rpl/sim.csc  # or
-$ contiker make run-rpl
+$ contiker cooja-run cooja-sim/test/sim.csc
 ```
 
 To auto-format source code
@@ -52,7 +50,7 @@ To auto-format source code
 $ contiker make fmt
 ```
 
-Or simple enter the Docker container:
+Or simply enter the Docker container:
 ```console
 $ contiker bash
 ```
