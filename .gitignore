@@ -1,7 +1,9 @@
+# Contiki and Cooja
 build/
 log-*/
 *.cooja
 *.native
 *.o
 
+# Python
 __pycache__/
