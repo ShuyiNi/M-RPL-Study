@@ -17,6 +17,7 @@ run-all:
 
 fmt:
 	find experiment -name '*.h' -or -name '*.c' -exec clang-format -style=file -i {} \;
+	black experiment
 	black bin/cooja bin/cooja-process bin/cooja-run
 
 .PHONY: docker-build run-test run-all fmt

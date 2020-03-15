@@ -13,7 +13,7 @@ COOJA = CONTIKI / "tools/cooja/dist/cooja.jar"
 # Parse arguments
 parser = ArgumentParser()
 parser.add_argument("config", type=Path)
-parser.add_argument("-s", "--seed", type=int, default=0)
+parser.add_argument("-s", "--seed", type=int, default=42)
 parser.add_argument("-t", "--tag", default=None)
 args = parser.parse_args()
 config = args.config.absolute()
