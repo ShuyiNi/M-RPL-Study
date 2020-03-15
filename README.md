@@ -54,9 +54,3 @@ Or simply enter the Docker container:
 ```console
 $ contiker bash
 ```
-
-To clean up:
-```console
-$ make clean
-$ make distclean
-```
