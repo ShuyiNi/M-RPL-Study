@@ -1,8 +1,5 @@
 #include "contiki-net.h"
 #include "contiki.h"
-#include "net/ipv6/simple-udp.h"
-#include "net/netstack.h"
-#include "net/routing/routing.h"
 #include "random.h"
 #include "services/deployment/deployment.h"
 
@@ -12,9 +9,11 @@
 #define LOG_MODULE "App"
 #define LOG_LEVEL LOG_LEVEL_INFO
 
-#define UDP_PORT 8214
-#define SEND_INTERVAL (CLOCK_SECOND / 2)
-#define JITR_INTERVAL (SEND_INTERVAL / 10)
+#define UDP_PORT 1234
+
+#define ROOT_ID 1
+#define WAIT_TIME (100 * CLOCK_SECOND)
+#define SEND_INTERVAL (SIM_PKT_INT * CLOCK_SECOND / 10)
 
 static struct simple_udp_connection udp_conn;
 
@@ -42,16 +41,18 @@ PROCESS_THREAD(app_process, ev, data) {
 
   PROCESS_BEGIN();
 
+  LOG_INFO("RPL_WITH_MULTIPATH=%u\n", RPL_WITH_MULTIPATH);
+  LOG_INFO("SIM_PKT_INT=%u\n", SIM_PKT_INT);
+
   /* Initialize UDP connection */
   simple_udp_register(&udp_conn, UDP_PORT, NULL, UDP_PORT, udp_rx_callback);
 
   if (node_id == ROOT_ID) {
     /* Initialize DAG root */
     NETSTACK_ROUTING.root_start();
-
   } else {
-    /* wait 60 seconds for Topology built. */
-    etimer_set(&start_timer, CLOCK_SECOND * 60);
+    /* Wait for RPL to set up */
+    etimer_set(&start_timer, WAIT_TIME);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&start_timer));
 
     etimer_set(&periodic_timer, random_rand() % SEND_INTERVAL);
@@ -70,9 +71,8 @@ PROCESS_THREAD(app_process, ev, data) {
         LOG_INFO("Not reachable yet\n");
       }
 
-      /* Add some jitter */
-      etimer_set(&periodic_timer, SEND_INTERVAL - JITR_INTERVAL / 2 +
-                                      random_rand() % JITR_INTERVAL);
+      /* Schedule next packet */
+      etimer_set(&periodic_timer, SEND_INTERVAL);
     }
   }
 

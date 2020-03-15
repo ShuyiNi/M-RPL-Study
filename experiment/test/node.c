@@ -1,7 +1,7 @@
-#include "contiki.h"
 #include "contiki-net.h"
-#include "services/deployment/deployment.h"
+#include "contiki.h"
 #include "random.h"
+#include "services/deployment/deployment.h"
 
 #include <inttypes.h>
 
@@ -12,7 +12,8 @@
 #define UDP_PORT 1234
 
 #define ROOT_ID 1
-#define SEND_INTERVAL (SIM_PKT_INT * CLOCK_SECOND / 100)
+#define WAIT_TIME (50 * CLOCK_SECOND)
+#define SEND_INTERVAL (SIM_PKT_INT * CLOCK_SECOND / 10)
 
 static struct simple_udp_connection udp_conn;
 
@@ -47,8 +48,8 @@ PROCESS_THREAD(app_process, ev, data) {
     /* Initialize DAG root */
     NETSTACK_ROUTING.root_start();
   } else {
-    /* Wait 50 seconds for RPL setup */
-    etimer_set(&start_timer, CLOCK_SECOND * 50);
+    /* Wait for RPL to set up */
+    etimer_set(&start_timer, WAIT_TIME);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&start_timer));
 
     etimer_set(&periodic_timer, random_rand() % SEND_INTERVAL);

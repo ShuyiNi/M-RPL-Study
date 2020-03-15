@@ -1,5 +1,5 @@
-#include "contiki.h"
 #include "contiki-net.h"
+#include "contiki.h"
 
 #include "sys/log.h"
 #define LOG_MODULE "App"

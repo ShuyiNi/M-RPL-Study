@@ -1,7 +1,7 @@
-#include "contiki.h"
 #include "contiki-net.h"
-#include "services/deployment/deployment.h"
+#include "contiki.h"
 #include "random.h"
+#include "services/deployment/deployment.h"
 
 #include <inttypes.h>
 
@@ -11,6 +11,8 @@
 
 #define UDP_PORT 1234
 
+#define ROOT_ID 1
+#define WAIT_TIME (100 * CLOCK_SECOND)
 #define MAX_SRC_ID (SIM_N_SRC + 1)
 #define SEND_INTERVAL (SIM_PKT_INT * CLOCK_SECOND / 10)
 
@@ -41,19 +43,18 @@ PROCESS_THREAD(app_process, ev, data) {
   PROCESS_BEGIN();
 
   LOG_INFO("RPL_WITH_MULTIPATH=%u\n", RPL_WITH_MULTIPATH);
-  LOG_INFO("SIM_ROOT_ID=%u\n", SIM_ROOT_ID);
   LOG_INFO("SIM_N_SRC=%u\n", SIM_N_SRC);
   LOG_INFO("SIM_PKT_INT=%u\n", SIM_PKT_INT);
 
   /* Initialize UDP connection */
   simple_udp_register(&udp_conn, UDP_PORT, NULL, UDP_PORT, udp_rx_callback);
 
-  if (node_id == SIM_ROOT_ID) {
+  if (node_id == ROOT_ID) {
     /* Initialize DAG root */
     NETSTACK_ROUTING.root_start();
   } else if (node_id <= MAX_SRC_ID) {
-    /* wait 60 seconds for Topology built. */
-    etimer_set(&start_timer, CLOCK_SECOND * 100);
+    /* Wait for RPL to set up */
+    etimer_set(&start_timer, WAIT_TIME);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&start_timer));
 
     etimer_set(&periodic_timer, random_rand() % SEND_INTERVAL);

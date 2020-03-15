@@ -105,17 +105,20 @@ def report_stat(df, stat_file):
 
 
 def make_diag_plot(df, plot_file, bins=100):
-    grp = df.groupby(pd.cut(df["t_recv"], bins))
+    cat, bin_edges = pd.cut(df["t_recv"], bins, retbins=True)
+    bin_widths = bin_edges[1:] - bin_edges[:-1]
+    grp = df.groupby(cat)
     grp_mean = grp.mean()
+    grp_count = grp.count()
 
     time = grp_mean["t_recv"].values
     latency = grp_mean["latency"].values
-    throughput = grp.size().values
+    throughput = grp_count["t_recv"].values / bin_widths
 
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
 
     ax1.plot(time, throughput)
-    ax1.set_ylabel("Throughput (s)")
+    ax1.set_ylabel("Throughput (packets/s)")
 
     ax2.plot(time, latency)
     ax2.set_ylabel("Latency (s)")

@@ -3,7 +3,7 @@ all: $(CONTIKI_PROJECT)
 
 # Simulation parameters
 CFLAGS += -DRPL_CONF_WITH_MULTIPATH={{multipath}}
-CFLAGS += -DSIM_PKT_INT=15
+CFLAGS += -DSIM_PKT_INT=2
 
 # Netstack
 MAKE_MAC = MAKE_MAC_CSMA
